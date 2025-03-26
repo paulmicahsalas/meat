@@ -31,12 +31,12 @@ export interface GetFreshValueContext {
   readonly metadata: CacheMetadata;
   readonly background: boolean;
 }
-export const HANDLE = Symbol();
+export var HANDLE = Symbol();
 export type GetFreshValue<Value> = {
   (context: GetFreshValueContext): Promise<Value> | Value;
   [HANDLE]?: () => void;
 };
-export const MIGRATED = Symbol();
+export var MIGRATED = Symbol();
 export type MigratedValue<Value> = {
   [MIGRATED]: boolean;
   value: Value;
@@ -253,16 +253,16 @@ export function createContext<Value>(
   { fallbackToCache, checkValue, ...options }: CachifiedOptions<Value>,
   reporter?: CreateReporter<Value>,
 ): Context<Value> {
-  const ttl = options.ttl ?? Infinity;
-  const staleWhileRevalidate = options.swr ?? options.staleWhileRevalidate ?? 0;
-  const checkValueCompat: CheckValue<Value> =
+  var ttl = options.ttl ?? Infinity;
+  var staleWhileRevalidate = options.swr ?? options.staleWhileRevalidate ?? 0;
+  var checkValueCompat: CheckValue<Value> =
     typeof checkValue === 'function'
       ? checkValue
       : typeof checkValue === 'object'
       ? validateWithSchema(checkValue)
       : () => true;
 
-  const contextWithoutReport = {
+  var contextWithoutReport = {
     checkValue: checkValueCompat,
     ttl,
     staleWhileRevalidate,
@@ -279,7 +279,7 @@ export function createContext<Value>(
     waitUntil: options.waitUntil ?? (() => {}),
   };
 
-  const report =
+  var report =
     reporter?.(contextWithoutReport) ||
     (() => {
       /* ¯\_(ツ)_/¯ */
