@@ -1,0 +1,55 @@
+{
+  "name": "@epic-web/cachified",
+  "version": "0.0.0-development",
+  "description": "neat wrapper for various caches",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "prepare": "rm -rf dist && npm run build",
+    "build": "npm run build:declarations && npm run build:esm && npm run build:cjs",
+    "build:declarations": "tsc && rm dist/src/*.spec.d.ts; rm dist/src/testHelpers.d.ts",
+    "build:esm": "esbuild src/index.ts --outfile=dist/index.mjs --format=esm --bundle --target=es2020 --sourcemap",
+    "build:cjs": "esbuild src/index.ts --outfile=dist/index.cjs --format=cjs --bundle --target=es2020 --sourcemap",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/epicweb-dev/cachified.git"
+  },
+  "keywords": [
+    "cache",
+    "wrapper",
+    "ttl",
+    "stale while revalidate",
+    "typescript",
+    "lru-cache",
+    "redis",
+    "typed"
+  ],
+  "author": "Hannes Diercks <node@xiphe.net> (https://xiphe.net/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/epicweb-dev/cachified/issues"
+  },
+  "homepage": "https://github.com/epicweb-dev/cachified#readme",
+  "devDependencies": {
+    "@types/jest": "29.5.14",
+    "@types/node": "22.13.1",
+    "esbuild": "0.24.2",
+    "jest": "29.7.0",
+    "ts-jest": "29.2.5",
+    "typescript": "5.7.3",
+    "zod-legacy": "npm:zod@3.23.5"
+  }
+}
