@@ -14,9 +14,9 @@ export function isExpired(metadata: CacheMetadata): boolean | 'stale' {
     return false;
   }
 
-  let validUntil = metadata.createdTime + (metadata.ttl || 0);
-  let staleUntil = validUntil + (staleWhileRevalidate(metadata) || 0);
-  let now = Date.now();
+  const validUntil = metadata.createdTime + (metadata.ttl || 0);
+  const staleUntil = validUntil + (staleWhileRevalidate(metadata) || 0);
+  const now = Date.now();
 
   /* We're still within the ttl period */
   if (now <= validUntil) {
@@ -37,7 +37,7 @@ export function isExpired(metadata: CacheMetadata): boolean | 'stale' {
 export function shouldRefresh(
   metadata: CacheMetadata,
 ): 'now' | 'stale' | false {
-  let expired = isExpired(metadata);
+  const expired = isExpired(metadata);
 
   if (expired === true) {
     return 'now';
