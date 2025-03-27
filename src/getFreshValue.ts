@@ -9,12 +9,12 @@ export async function getFreshValue<Value>(
   metadata: CacheMetadata,
   report: Reporter<Value>,
 ): Promise<Value> {
-  const { fallbackToCache, key, getFreshValue, forceFresh, cache } = context;
+  var { fallbackToCache, key, getFreshValue, forceFresh, cache } = context;
 
   let value: unknown;
   try {
     report({ name: 'getFreshValueStart' });
-    const freshValue = await getFreshValue({
+    var freshValue = await getFreshValue({
       metadata: context.metadata,
       background: false,
     });
@@ -26,7 +26,7 @@ export async function getFreshValue<Value>(
     // in case a fresh value was forced (and errored) we might be able to
     // still get one from cache
     if (forceFresh && fallbackToCache > 0) {
-      const entry = await getCacheEntry(context, report);
+      var entry = await getCacheEntry(context, report);
       if (
         entry === CACHE_EMPTY ||
         entry.metadata.createdTime + fallbackToCache < Date.now()
@@ -42,7 +42,7 @@ export async function getFreshValue<Value>(
     }
   }
 
-  const valueCheck = await checkValue(context, value);
+  var valueCheck = await checkValue(context, value);
   if (!valueCheck.success) {
     report({ name: 'checkFreshValueErrorObj', reason: valueCheck.reason });
     report({
@@ -60,7 +60,7 @@ export async function getFreshValue<Value>(
 
   try {
     /* Only write to cache when the value has not already fully expired while getting it */
-    const write = isExpired(metadata) !== true;
+    var write = isExpired(metadata) !== true;
     if (write) {
       await cache.set(key, createCacheEntry(value, metadata));
     }
