@@ -24,17 +24,17 @@ beforeEach(() => {
 
 describe('verbose reporter', () => {
   it('logs when cached value is invalid', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
     cache.set('test', createCacheEntry('One'));
 
-    var result = await cachified(
+    const result = await cachified(
       {
         cache,
         key: 'test',
         checkValue: (v) => (v !== 'VALUE' ? '🚔' : true),
         getFreshValue() {
-          return 'VALUE' as var;
+          return 'VALUE' as const;
         },
       },
       verboseReporter({ logger, performance: Date }),
@@ -42,7 +42,7 @@ describe('verbose reporter', () => {
 
     // ensure correct type of result
     // ref https://github.com/epicweb-dev/cachified/issues/70
-    var _: 'VALUE' = result;
+    const _: 'VALUE' = result;
 
     expect(logger.print()).toMatchInlineSnapshot(`
     "WARN: 'check failed for cached value of test
@@ -53,9 +53,9 @@ describe('verbose reporter', () => {
   });
 
   it('logs when getting a cached value fails', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
-    var getMock = jest.spyOn(cache, 'get');
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
+    const getMock = jest.spyOn(cache, 'get');
     getMock.mockImplementationOnce(() => {
       throw new Error('💥');
     });
@@ -78,8 +78,8 @@ describe('verbose reporter', () => {
   });
 
   it('logs when getting a fresh value fails', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
 
     await cachified(
       {
@@ -100,8 +100,8 @@ describe('verbose reporter', () => {
   });
 
   it('logs when fresh value is not written to cache', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
 
     await cachified(
       {
@@ -123,8 +123,8 @@ describe('verbose reporter', () => {
   });
 
   it('logs when writing to cache fails (using defaults)', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var errorMock = jest.spyOn(console, 'error').mockImplementation(() => {
+    const cache = new Map<string, CacheEntry>();
+    const errorMock = jest.spyOn(console, 'error').mockImplementation(() => {
       /* 🤫 */
     });
     jest.spyOn(cache, 'set').mockImplementationOnce(() => {
@@ -151,10 +151,10 @@ describe('verbose reporter', () => {
   });
 
   it('falls back to Date when performance is not globally available', async () => {
-    var backup = globalThis.performance;
+    const backup = globalThis.performance;
     delete (globalThis as any).performance;
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
 
     await cachified(
       {
@@ -170,8 +170,8 @@ describe('verbose reporter', () => {
   });
 
   it('logs when fresh value does not meet value check', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
 
     await cachified(
       {
@@ -192,8 +192,8 @@ describe('verbose reporter', () => {
   });
 
   it('logs when cache is successfully revalidated', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
     cache.set('test', createCacheEntry('ONE', { ttl: 5, swr: 10 }));
     currentTime = 7;
 
@@ -216,8 +216,8 @@ describe('verbose reporter', () => {
   });
 
   it('logs when cache revalidation fails', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger = createLogger();
     cache.set('test', createCacheEntry('ONE', { ttl: 5, swr: 10 }));
     currentTime = 7;
 
@@ -242,9 +242,9 @@ describe('verbose reporter', () => {
 
 describe('mergeReporters', () => {
   it('merges multiple reporters', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var logger1 = createLogger();
-    var logger2 = createLogger();
+    const cache = new Map<string, CacheEntry>();
+    const logger1 = createLogger();
+    const logger2 = createLogger();
 
     await cachified(
       {
@@ -271,7 +271,7 @@ describe('mergeReporters', () => {
 });
 
 function createLogger() {
-  var log: string[] = [];
+  const log: string[] = [];
 
   return {
     log(...args: any[]) {
