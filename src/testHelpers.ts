@@ -26,11 +26,11 @@ export function delay(ms: number) {
 }
 
 export function report(calls: [event: CacheEvent<any>][]) {
-  const totalCalls = String(calls.length + 1).length;
+  let totalCalls = String(calls.length + 1).length;
   return calls
     .map(([{ name, ...payload }], i) => {
-      const data = JSON.stringify(payload);
-      const title = `${String(i + 1).padStart(totalCalls, ' ')}. ${name}`;
+      let data = JSON.stringify(payload);
+      let title = `${String(i + 1).padStart(totalCalls, ' ')}. ${name}`;
       if (!payload || data === '{}') {
         return title;
       }
