@@ -6,13 +6,13 @@ import { cachified } from './cachified';
 import { Reporter } from './reporter';
 import { checkValue } from './checkValue';
 
-export let CACHE_EMPTY = Symbol();
+export const CACHE_EMPTY = Symbol();
 export async function getCacheEntry<Value>(
   { key, cache }: Pick<Context<Value>, 'key' | 'cache'>,
   report: Reporter<Value>,
 ): Promise<CacheEntry<unknown> | typeof CACHE_EMPTY> {
   report({ name: 'getCachedValueStart' });
-  let cached = await cache.get(key);
+  const cached = await cache.get(key);
   report({ name: 'getCachedValueRead', entry: cached });
   if (cached) {
     assertCacheEntry(cached, key);
@@ -26,7 +26,7 @@ export async function getCachedValue<Value>(
   report: Reporter<Value>,
   hasPendingValue: () => boolean,
 ): Promise<Value | typeof CACHE_EMPTY> {
-  let {
+  const {
     key,
     cache,
     staleWhileRevalidate,
@@ -35,15 +35,15 @@ export async function getCachedValue<Value>(
     getFreshValue: { [HANDLE]: handle },
   } = context;
   try {
-    let cached = await getCacheEntry(context, report);
+    const cached = await getCacheEntry(context, report);
 
     if (cached === CACHE_EMPTY) {
       report({ name: 'getCachedValueEmpty' });
       return CACHE_EMPTY;
     }
 
-    let expired = isExpired(cached.metadata);
-    let staleRefresh =
+    const expired = isExpired(cached.metadata);
+    const staleRefresh =
       expired === 'stale' ||
       (expired === true && staleWhileRevalidate === Infinity);
 
@@ -76,7 +76,7 @@ export async function getCachedValue<Value>(
     }
 
     if (!expired || staleRefresh) {
-      let valueCheck = await checkValue(context, cached.value);
+      const valueCheck = await checkValue(context, cached.value);
       if (valueCheck.success) {
         report({
           name: 'getCachedValueSuccess',
@@ -93,7 +93,7 @@ export async function getCachedValue<Value>(
             Promise.resolve().then(async () => {
               try {
                 await sleep(0); // align with original setTimeout behavior (allowing other microtasks/tasks to run)
-                let cached = await context.cache.get(context.key);
+                const cached = await context.cache.get(context.key);
 
                 // Unless cached value was changed in the meantime or is about to
                 // change
