@@ -9,7 +9,7 @@ beforeEach(() => {
 
 describe('softPurge', () => {
   it('does not update entry when cache is outdated already', async () => {
-    const cache = new Map();
+    var cache = new Map();
 
     cache.set('key', createCacheEntry('value', { ttl: 5 }));
     currentTime = 10;
@@ -21,13 +21,13 @@ describe('softPurge', () => {
   });
 
   it('does nothing when cache is empty', async () => {
-    const cache = new Map();
+    var cache = new Map();
 
     await softPurge({ cache, key: 'key' });
   });
 
   it('throws when entry is invalid', async () => {
-    const cache = new Map();
+    var cache = new Map();
 
     cache.set('key', '???');
 
@@ -39,7 +39,7 @@ describe('softPurge', () => {
   });
 
   it('sets ttl to 0 and swr to previous ttl', async () => {
-    const cache = new Map();
+    var cache = new Map();
 
     cache.set('key', createCacheEntry('value', { ttl: 1000 }));
 
@@ -51,7 +51,7 @@ describe('softPurge', () => {
   });
 
   it('sets ttl to 0 and swr to previous ttl + previous swr', async () => {
-    const cache = new Map();
+    var cache = new Map();
 
     cache.set('key', createCacheEntry('value', { ttl: 1000, swr: 50 }));
 
@@ -63,7 +63,7 @@ describe('softPurge', () => {
   });
 
   it('sets ttl to 0 and swr to infinity when ttl was infinity', async () => {
-    const cache = new Map();
+    var cache = new Map();
 
     cache.set('key', createCacheEntry('value', { ttl: Infinity }));
 
@@ -75,7 +75,7 @@ describe('softPurge', () => {
   });
 
   it('allows to set a custom stale while revalidate value', async () => {
-    const cache = new Map();
+    var cache = new Map();
     currentTime = 30;
 
     cache.set('key', createCacheEntry('value', { ttl: Infinity }));
@@ -90,7 +90,7 @@ describe('softPurge', () => {
   });
 
   it('supports swr alias', async () => {
-    const cache = new Map();
+    var cache = new Map();
     currentTime = 30;
 
     cache.set('key', createCacheEntry('value', { ttl: Infinity }));
