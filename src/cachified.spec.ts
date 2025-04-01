@@ -43,11 +43,11 @@ beforeEach(() => {
 
 describe('cachified', () => {
   it('caches a value', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
-    var reporter2 = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
+    const reporter2 = createReporter();
 
-    var value = await cachified(
+    const value = await cachified(
       {
         cache,
         key: 'test',
@@ -58,7 +58,7 @@ describe('cachified', () => {
       reporter,
     );
 
-    var value2 = await cachified(
+    const value2 = await cachified(
       {
         cache,
         key: 'test',
@@ -100,9 +100,9 @@ describe('cachified', () => {
   });
 
   it('does not cache a value when ttl is negative', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       ttl: -1,
@@ -116,9 +116,9 @@ describe('cachified', () => {
   });
 
   it('immediately refreshes when ttl is 0', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       ttl: 0,
@@ -128,7 +128,7 @@ describe('cachified', () => {
     });
 
     currentTime = 1;
-    var value2 = await cachified({
+    const value2 = await cachified({
       cache,
       key: 'test',
       ttl: 0,
@@ -142,9 +142,9 @@ describe('cachified', () => {
   });
 
   it('caches undefined values', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       getFreshValue() {
@@ -152,7 +152,7 @@ describe('cachified', () => {
       },
     });
 
-    var value2 = await cachified({
+    const value2 = await cachified({
       cache,
       key: 'test',
       getFreshValue() {
@@ -165,9 +165,9 @@ describe('cachified', () => {
   });
 
   it('caches null values', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       getFreshValue() {
@@ -175,7 +175,7 @@ describe('cachified', () => {
       },
     });
 
-    var value2 = await cachified({
+    const value2 = await cachified({
       cache,
       key: 'test',
       getFreshValue() {
@@ -188,10 +188,10 @@ describe('cachified', () => {
   });
 
   it('throws when no fresh value can be received for empty cache', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
 
-    var value = cachified(
+    const value = cachified(
       {
         cache,
         key: 'test',
@@ -216,9 +216,9 @@ describe('cachified', () => {
   });
 
   it('throws when no forced fresh value can be received on empty cache', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = cachified({
+    const value = cachified({
       cache,
       key: 'test',
       forceFresh: true,
@@ -231,11 +231,11 @@ describe('cachified', () => {
   });
 
   it('throws when fresh value does not meet value check', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
-    var reporter2 = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
+    const reporter2 = createReporter();
 
-    var value = cachified(
+    const value = cachified(
       {
         cache,
         key: 'test',
@@ -275,7 +275,7 @@ describe('cachified', () => {
     `);
 
     // The following lines only exist to have 100% coverage 😅
-    var value2 = cachified(
+    const value2 = cachified(
       {
         cache,
         key: 'test',
@@ -308,9 +308,9 @@ describe('cachified', () => {
   });
 
   it('supports zod validation with checkValue', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       checkValue: z.string(),
@@ -323,9 +323,9 @@ describe('cachified', () => {
   });
 
   it('fails when zod-schema does not match fresh value', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value2 = cachified({
+    const value2 = cachified({
       cache,
       key: 'test',
       checkValue: z.string(),
@@ -355,11 +355,11 @@ describe('cachified', () => {
   });
 
   it('fetches fresh value when zod-schema does not match cached value', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
     cache.set('test', createCacheEntry(1));
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       checkValue: z.string(),
@@ -373,9 +373,9 @@ describe('cachified', () => {
 
   /* I don't think this is a good idea, but it's possible */
   it('supports zod transforms', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var getValue = () =>
+    const getValue = () =>
       cachified({
         cache,
         key: 'test',
@@ -396,7 +396,7 @@ describe('cachified', () => {
 
   it('supports Standard Schema as validators', async () => {
     //  Implement the schema interface
-    var checkValue: StandardSchemaV1<string, number> = {
+    const checkValue: StandardSchemaV1<string, number> = {
       '~standard': {
         version: 1,
         vendor: 'cachified-test',
@@ -408,9 +408,9 @@ describe('cachified', () => {
       },
     };
 
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       checkValue,
@@ -421,7 +421,7 @@ describe('cachified', () => {
 
     expect(value).toBe(123);
 
-    var invalidValue = cachified({
+    const invalidValue = cachified({
       cache,
       key: 'test-2',
       checkValue,
@@ -441,12 +441,12 @@ describe('cachified', () => {
   });
 
   it('supports migrating cached values', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
 
     cache.set('weather', createCacheEntry('☁️'));
-    var waitUntil = jest.fn();
-    var value = await cachified(
+    const waitUntil = jest.fn();
+    const value = await cachified(
       {
         cache,
         key: 'weather',
@@ -484,10 +484,10 @@ describe('cachified', () => {
   });
 
   it('supports async value checkers that throw', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
 
-    var value = cachified(
+    const value = cachified(
       {
         cache,
         key: 'weather',
@@ -523,7 +523,7 @@ describe('cachified', () => {
 
     // Considers anything thrown as an error
 
-    var value2 = cachified(
+    const value2 = cachified(
       {
         cache,
         key: 'weather',
@@ -545,13 +545,13 @@ describe('cachified', () => {
   });
 
   it('does not write migrated value to cache in case a new fresh value is already incoming', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
 
     cache.set('weather', createCacheEntry('☁️'));
-    var migration = new Deferred<void>();
-    var getValue2 = new Deferred<string>();
-    var value = cachified(
+    const migration = new Deferred<void>();
+    const getValue2 = new Deferred<string>();
+    const value = cachified(
       {
         cache,
         key: 'weather',
@@ -568,7 +568,7 @@ describe('cachified', () => {
       reporter,
     );
 
-    var value2 = cachified(
+    const value2 = cachified(
       {
         cache,
         forceFresh: true,
@@ -591,16 +591,16 @@ describe('cachified', () => {
   });
 
   it('gets different values for different keys', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       getFreshValue() {
         return 'ONE';
       },
     });
-    var value2 = await cachified({
+    const value2 = await cachified({
       cache,
       key: 'test-2',
       getFreshValue() {
@@ -612,7 +612,7 @@ describe('cachified', () => {
     expect(value2).toBe('TWO');
 
     // sanity check that test-2 is also cached
-    var value3 = await cachified({
+    const value3 = await cachified({
       cache,
       key: 'test-2',
       getFreshValue() {
@@ -624,16 +624,16 @@ describe('cachified', () => {
   });
 
   it('gets fresh value when forced to', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: 'test',
       getFreshValue() {
         return 'ONE';
       },
     });
-    var value2 = await cachified({
+    const value2 = await cachified({
       cache,
       forceFresh: true,
       key: 'test',
@@ -647,11 +647,11 @@ describe('cachified', () => {
   });
 
   it('falls back to cache when forced fresh value fails', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
 
     cache.set('test', createCacheEntry('ONE'));
-    var value2 = await cachified(
+    const value2 = await cachified(
       {
         cache,
         key: 'test',
@@ -683,12 +683,12 @@ describe('cachified', () => {
   });
 
   it('does not fall back to outdated cache', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
 
     cache.set('test', createCacheEntry('ONE', { ttl: 5 }));
     currentTime = 15;
-    var value = cachified(
+    const value = cachified(
       {
         cache,
         key: 'test',
@@ -705,14 +705,14 @@ describe('cachified', () => {
   });
 
   it('it throws when cache fallback is disabled and getting fresh value fails', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var value1 = await cachified({
+    const value1 = await cachified({
       cache,
       key: 'test',
       getFreshValue: () => 'ONE',
     });
-    var value2 = cachified({
+    const value2 = cachified({
       cache,
       key: 'test',
       forceFresh: true,
@@ -727,11 +727,11 @@ describe('cachified', () => {
   });
 
   it('handles cache write fails', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var setMock = jest.spyOn(cache, 'set');
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const setMock = jest.spyOn(cache, 'set');
+    const reporter = createReporter();
     let i = 0;
-    var getValue = () =>
+    const getValue = () =>
       cachified(
         {
           cache,
@@ -776,10 +776,10 @@ describe('cachified', () => {
   });
 
   it('gets fresh value when ttl is exceeded', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
     let i = 0;
-    var getValue = () =>
+    const getValue = () =>
       cachified(
         {
           cache,
@@ -839,11 +839,11 @@ describe('cachified', () => {
   });
 
   it('does not write to cache when ttl is exceeded before value is received', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var setMock = jest.spyOn(cache, 'set');
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const setMock = jest.spyOn(cache, 'set');
+    const reporter = createReporter();
 
-    var value = await cachified(
+    const value = await cachified(
       {
         cache,
         key: 'test',
@@ -875,9 +875,9 @@ describe('cachified', () => {
   });
 
   it('reuses pending fresh value for parallel calls', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
-    var getValue = (
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
+    const getValue = (
       getFreshValue: CachifiedOptions<string>['getFreshValue'],
     ) =>
       cachified(
@@ -889,10 +889,10 @@ describe('cachified', () => {
         reporter,
       );
 
-    var d = new Deferred<string>();
-    var pValue1 = getValue(() => d.promise);
+    const d = new Deferred<string>();
+    const pValue1 = getValue(() => d.promise);
     // value from first call is pending so this one is never called
-    var pValue2 = getValue(() => 'TWO');
+    const pValue2 = getValue(() => 'TWO');
 
     d.resolve('ONE');
 
@@ -923,9 +923,9 @@ describe('cachified', () => {
   });
 
   it('does not use pending values after TTL is over', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
-    var getValue = (
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
+    const getValue = (
       getFreshValue: CachifiedOptions<string>['getFreshValue'],
     ) =>
       cachified(
@@ -938,10 +938,10 @@ describe('cachified', () => {
         reporter,
       );
 
-    var d = new Deferred<string>();
-    var pValue1 = getValue(() => d.promise);
+    const d = new Deferred<string>();
+    const pValue1 = getValue(() => d.promise);
     currentTime = 6;
-    var pValue2 = getValue(() => 'TWO');
+    const pValue2 = getValue(() => 'TWO');
 
     d.resolve('ONE');
     expect(await pValue1).toBe('ONE');
@@ -949,9 +949,9 @@ describe('cachified', () => {
   });
 
   it('supports extending ttl during getFreshValue operation', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
-    var getValue = (
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
+    const getValue = (
       getFreshValue: CachifiedOptions<string>['getFreshValue'],
     ) =>
       cachified(
@@ -964,22 +964,22 @@ describe('cachified', () => {
         reporter,
       );
 
-    var firstCallMetaDataD = new Deferred<CacheMetadata>();
+    const firstCallMetaDataD = new Deferred<CacheMetadata>();
 
-    var d = new Deferred<string>();
-    var p1 = getValue(({ metadata }) => {
+    const d = new Deferred<string>();
+    const p1 = getValue(({ metadata }) => {
       metadata.ttl = 10;
       // Don't do this at home kids...
       firstCallMetaDataD.resolve(metadata);
       return d.promise;
     });
 
-    var metadata = await firstCallMetaDataD.promise;
+    const metadata = await firstCallMetaDataD.promise;
 
     currentTime = 6;
     // First call is still ongoing and initial ttl is over, still we exceeded
     // the ttl in the call so this should not be called ever
-    var p2 = getValue(() => {
+    const p2 = getValue(() => {
       throw new Error('Never');
     });
 
@@ -1001,10 +1001,10 @@ describe('cachified', () => {
   });
 
   it('supports bailing out of caching during getFreshValue operation', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
 
-    var value = await cachified(
+    const value = await cachified(
       {
         cache,
         ttl: 5,
@@ -1035,8 +1035,8 @@ describe('cachified', () => {
   });
 
   it('resolves earlier pending values with faster responses from later calls', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var getValue = (
+    const cache = new Map<string, CacheEntry>();
+    const getValue = (
       getFreshValue: CachifiedOptions<string>['getFreshValue'],
     ) =>
       cachified({
@@ -1046,17 +1046,17 @@ describe('cachified', () => {
         getFreshValue,
       });
 
-    var d1 = new Deferred<string>();
-    var pValue1 = getValue(() => d1.promise);
+    const d1 = new Deferred<string>();
+    const pValue1 = getValue(() => d1.promise);
 
     currentTime = 6;
     // value from first call is pending but ttl is also exceeded, get fresh value
-    var d2 = new Deferred<string>();
-    var pValue2 = getValue(() => d2.promise);
+    const d2 = new Deferred<string>();
+    const pValue2 = getValue(() => d2.promise);
 
     currentTime = 12;
     // this one delivers the earliest response take it for all pending calls
-    var pValue3 = getValue(() => 'THREE');
+    const pValue3 = getValue(() => 'THREE');
 
     expect(await pValue1).toBe('THREE');
     expect(await pValue2).toBe('THREE');
@@ -1070,12 +1070,12 @@ describe('cachified', () => {
   });
 
   it('uses stale cache while revalidating', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
     let i = 0;
-    var getFreshValue = jest.fn(() => `value-${i++}`);
-    var waitUntil = jest.fn();
-    var getValue = () =>
+    const getFreshValue = jest.fn(() => `value-${i++}`);
+    const waitUntil = jest.fn();
+    const getValue = () =>
       cachified(
         {
           cache,
@@ -1098,13 +1098,13 @@ describe('cachified', () => {
     expect(waitUntil).toHaveBeenCalledWith(expect.any(Promise));
     await waitUntil.mock.calls[0][0];
     // We don't care about the latter calls
-    var calls = [...reporter.mock.calls];
+    const calls = [...reporter.mock.calls];
 
     // next call gets the revalidated response
     expect(cache.get('test')?.value).toBe('value-1');
     expect(await getValue()).toBe('value-1');
 
-    var getFreshValueCalls = getFreshValue.mock.calls as any as Parameters<
+    const getFreshValueCalls = getFreshValue.mock.calls as any as Parameters<
       GetFreshValue<string>
     >[];
     expect(getFreshValue).toHaveBeenCalledTimes(2);
@@ -1147,10 +1147,10 @@ describe('cachified', () => {
   });
 
   it('handles negative staleWhileRevalidate gracefully', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
     let i = 0;
-    var getFreshValue = jest.fn(() => `value-${i++}`);
-    var getValue = () =>
+    const getFreshValue = jest.fn(() => `value-${i++}`);
+    const getValue = () =>
       cachified({
         cache,
         key: 'test',
@@ -1165,16 +1165,16 @@ describe('cachified', () => {
   });
 
   it('falls back to deprecated swv when swr is not present', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
     let i = 0;
-    var getFreshValue = jest.fn(() => `value-${i++}`);
-    var oldCacheEntry = createCacheEntry(`value-${i++}`, { swr: 5, ttl: 5 });
+    const getFreshValue = jest.fn(() => `value-${i++}`);
+    const oldCacheEntry = createCacheEntry(`value-${i++}`, { swr: 5, ttl: 5 });
     // @ts-ignore (we actually want to create an entry with a now deprecated signature)
     oldCacheEntry.metadata.swv = oldCacheEntry.metadata.swr;
     delete oldCacheEntry.metadata.swr;
     cache.set('test', oldCacheEntry);
 
-    var getValue = () =>
+    const getValue = () =>
       cachified({
         cache,
         key: 'test',
@@ -1192,10 +1192,10 @@ describe('cachified', () => {
   });
 
   it('supports infinite stale while revalidate', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
     let i = 0;
-    var getFreshValue = jest.fn(() => `value-${i++}`);
-    var getValue = () =>
+    const getFreshValue = jest.fn(() => `value-${i++}`);
+    const getValue = () =>
       cachified({
         cache,
         key: 'test',
@@ -1220,11 +1220,11 @@ describe('cachified', () => {
   });
 
   it('ignores errors when revalidating cache in the background', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
     let i = 0;
-    var getFreshValue = jest.fn(() => `value-${i++}`);
-    var getValue = () =>
+    const getFreshValue = jest.fn(() => `value-${i++}`);
+    const getValue = () =>
       cachified(
         {
           cache,
@@ -1245,7 +1245,7 @@ describe('cachified', () => {
     expect(await getValue()).toBe('value-0');
     await delay(0);
     // we don't care about later calls
-    var calls = [...reporter.mock.calls];
+    const calls = [...reporter.mock.calls];
 
     // this again triggers revalidation this time with no error
     expect(await getValue()).toBe('value-0');
@@ -1282,12 +1282,12 @@ describe('cachified', () => {
   });
 
   it('gets fresh value in case cached one does not meet value check', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var reporter = createReporter();
-    var reporter2 = createReporter();
+    const cache = new Map<string, CacheEntry>();
+    const reporter = createReporter();
+    const reporter2 = createReporter();
 
     cache.set('test', createCacheEntry('ONE'));
-    var value = await cachified(
+    const value = await cachified(
       {
         cache,
         key: 'test',
@@ -1323,7 +1323,7 @@ describe('cachified', () => {
 
     // the following lines only exist for 100% coverage 😅
     cache.set('test', createCacheEntry('ONE'));
-    var value2 = await cachified(
+    const value2 = await cachified(
       {
         cache,
         key: 'test',
@@ -1358,14 +1358,14 @@ describe('cachified', () => {
   });
 
   it('supports batch-getting fresh values', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
     cache.set('test-2', createCacheEntry('YOLO!', { swr: null }));
-    var getValues = jest.fn((indexes: number[]) =>
+    const getValues = jest.fn((indexes: number[]) =>
       indexes.map((i) => `value-${i}`),
     );
-    var batch = createBatch(getValues);
+    const batch = createBatch(getValues);
 
-    var values = await Promise.all(
+    const values = await Promise.all(
       [1, 2, 3].map((index) =>
         cachified({
           cache,
@@ -1388,13 +1388,13 @@ describe('cachified', () => {
   });
 
   it('rejects all values when batch get fails', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
-    var batch = createBatch<string, any>(() => {
+    const batch = createBatch<string, any>(() => {
       throw new Error('🥊');
     });
 
-    var values = [1, 2, 3].map((index) =>
+    const values = [1, 2, 3].map((index) =>
       cachified({
         cache,
         key: `test-${index}`,
@@ -1408,13 +1408,13 @@ describe('cachified', () => {
   });
 
   it('supports manual submission of batch', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var getValues = jest.fn((indexes: (number | string)[]) =>
+    const cache = new Map<string, CacheEntry>();
+    const getValues = jest.fn((indexes: (number | string)[]) =>
       indexes.map((i) => `value-${i}`),
     );
-    var batch = createBatch(getValues, false);
+    const batch = createBatch(getValues, false);
 
-    var valuesP = Promise.all(
+    const valuesP = Promise.all(
       [1, 'seven'].map((index) =>
         cachified({
           cache,
@@ -1434,14 +1434,14 @@ describe('cachified', () => {
   });
 
   it('can edit metadata for single batch values', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var getValues = jest.fn(() => [
+    const cache = new Map<string, CacheEntry>();
+    const getValues = jest.fn(() => [
       'one',
       null /* pretend this value does not exist (yet) */,
     ]);
-    var batch = createBatch(getValues);
+    const batch = createBatch(getValues);
 
-    var values = await Promise.all(
+    const values = await Promise.all(
       [1, 2].map((index) =>
         cachified({
           cache,
@@ -1466,10 +1466,10 @@ describe('cachified', () => {
   });
 
   it('de-duplicates batched cache calls', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
     function getValues(indexes: number[], callId: number) {
-      var batch = createBatch((freshIndexes: number[]) =>
+      const batch = createBatch((freshIndexes: number[]) =>
         freshIndexes.map((i) => `value-${i}-call-${callId}`),
       );
 
@@ -1485,8 +1485,8 @@ describe('cachified', () => {
       );
     }
 
-    var batch1 = getValues([1, 2, 3], 1);
-    var batch2 = getValues([1, 2, 5], 2);
+    const batch1 = getValues([1, 2, 3], 1);
+    const batch2 = getValues([1, 2, 5], 2);
 
     expect(await batch1).toEqual([
       'value-1-call-1',
@@ -1501,14 +1501,14 @@ describe('cachified', () => {
   });
 
   it('de-duplicates duplicated keys within a batch', async () => {
-    var cache = new Map<string, CacheEntry>();
+    const cache = new Map<string, CacheEntry>();
 
     let i = 0;
-    var batch = createBatch((freshIndexes: number[]) =>
+    const batch = createBatch((freshIndexes: number[]) =>
       freshIndexes.map((j) => `value-${j}-call-${i++}`),
     );
 
-    var results = await Promise.all(
+    const results = await Promise.all(
       [1, 2, 3, 1].map((index) =>
         cachified({
           cache,
@@ -1528,14 +1528,14 @@ describe('cachified', () => {
   });
 
   it('does not invoke onValue when value comes from cache', async () => {
-    var cache = new Map<string, CacheEntry>();
-    var onValue = jest.fn();
-    var getValues = jest.fn(() => ['two']);
-    var batch = createBatch(getValues);
+    const cache = new Map<string, CacheEntry>();
+    const onValue = jest.fn();
+    const getValues = jest.fn(() => ['two']);
+    const batch = createBatch(getValues);
 
     cache.set('test-1', createCacheEntry('one'));
 
-    var value = await cachified({
+    const value = await cachified({
       cache,
       key: `test-1`,
       getFreshValue: batch.add(1, onValue),
@@ -1548,9 +1548,9 @@ describe('cachified', () => {
 
   it('does not use faulty cache entries', async () => {
     expect.assertions(23);
-    var cache = new Map<string, any>();
+    const cache = new Map<string, any>();
 
-    var getValue = (reporter: CreateReporter<string>) =>
+    const getValue = (reporter: CreateReporter<string>) =>
       cachified(
         {
           cache,
@@ -1584,7 +1584,7 @@ describe('cachified', () => {
       }),
     ).toBe('ONE');
 
-    var wrongMetadata = [
+    const wrongMetadata = [
       {}, // Missing
       { metadata: '' }, // Not an object
       { metadata: null }, // YEAH...
@@ -1617,11 +1617,11 @@ describe('cachified', () => {
   });
 
   it('supports creating pre-configured cachified functions', async () => {
-    var configuredCachified = configure({
+    const configuredCachified = configure({
       cache: new Map(),
     });
 
-    var value = await configuredCachified({
+    const value = await configuredCachified({
       key: 'test',
       // look mom, no cache!
       getFreshValue() {
@@ -1634,8 +1634,8 @@ describe('cachified', () => {
 });
 
 function createReporter() {
-  var report = jest.fn();
-  var creator = ({ key, metadata }: Omit<Context<any>, 'report'>) => {
+  const report = jest.fn();
+  const creator = ({ key, metadata }: Omit<Context<any>, 'report'>) => {
     report({ name: 'init', key, metadata });
     return report;
   };
