@@ -120,12 +120,12 @@ export type CreateReporter<Value> = (
   context: Omit<Context<Value>, 'report'>,
 ) => Reporter<Value>;
 
-const defaultFormatDuration = (ms: number) => `${Math.round(ms)}ms`;
+var defaultFormatDuration = (ms: number) => `${Math.round(ms)}ms`;
 function formatCacheTime(
   metadata: CacheMetadata,
   formatDuration: (duration: number) => string,
 ) {
-  const swr = staleWhileRevalidate(metadata);
+  var swr = staleWhileRevalidate(metadata);
   if (metadata.ttl == null || swr == null) {
     return `forever${
       metadata.ttl != null
@@ -149,7 +149,7 @@ export function verboseReporter<Value>({
   performance = globalThis.performance || Date,
 }: ReporterOpts = {}): CreateReporter<Value> {
   return ({ key, fallbackToCache, forceFresh, metadata, cache }) => {
-    const cacheName =
+    var cacheName =
       cache.name ||
       cache
         .toString()
@@ -188,7 +188,7 @@ export function verboseReporter<Value>({
           getFreshValueStartTs = performance.now();
           break;
         case 'writeFreshValueSuccess': {
-          const totalTime = performance.now() - getFreshValueStartTs;
+          var totalTime = performance.now() - getFreshValueStartTs;
           if (event.written) {
             logger.log(
               `Updated the cache value for ${key}.`,
@@ -253,7 +253,7 @@ export function mergeReporters<Value = unknown>(
   ...reporters: (CreateReporter<Value> | null | undefined)[]
 ): CreateReporter<Value> {
   return (context) => {
-    const reporter = reporters.map((r) => r?.(context));
+    var reporter = reporters.map((r) => r?.(context));
     return (event) => {
       reporter.forEach((r) => r?.(event));
     };
