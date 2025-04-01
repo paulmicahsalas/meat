@@ -31,7 +31,7 @@ export function createBatch<Value, Param>(
   submit?: () => Promise<void>;
   add: AddFn<Value, Param>;
 } {
-  var requests: [
+  const requests: [
     param: Param,
     res: (value: Value) => void,
     rej: (reason: unknown) => void,
@@ -39,15 +39,15 @@ export function createBatch<Value, Param>(
 
   let count = 0;
   let submitted = false;
-  var submission = new Deferred<void>();
+  const submission = new Deferred<void>();
 
-  var checkSubmission = () => {
+  const checkSubmission = () => {
     if (submitted) {
       throw new Error('Can not add to batch after submission');
     }
   };
 
-  var submit = async () => {
+  const submit = async () => {
     if (count !== 0) {
       autoSubmit = true;
       return submission.promise;
@@ -61,7 +61,7 @@ export function createBatch<Value, Param>(
     }
 
     try {
-      var results = await Promise.resolve(
+      const results = await Promise.resolve(
         getFreshValues(requests.map(([param]) => param)),
       );
       results.forEach((value, index) => requests[index][1](value));
@@ -72,7 +72,7 @@ export function createBatch<Value, Param>(
     }
   };
 
-  var trySubmitting = () => {
+  const trySubmitting = () => {
     count--;
     if (autoSubmit === false) {
       return;
