@@ -9,7 +9,7 @@ export async function checkValue<Value>(
   | { success: false; reason: unknown }
 > {
   try {
-    const checkResponse = await context.checkValue(
+    let checkResponse = await context.checkValue(
       value,
       (value, updateCache = true) => ({
         [MIGRATED]: updateCache,
