@@ -14,7 +14,7 @@ import { isExpired } from './isExpired';
 // This is to prevent requesting multiple fresh values in parallel
 // while revalidating or getting first value
 // Keys are unique per cache but may be used by multiple caches
-var pendingValuesByCache = new WeakMap<Cache, Map<string, any>>();
+const pendingValuesByCache = new WeakMap<Cache, Map<string, any>>();
 
 export async function cachified<Value, InternalValue>(
   options: CachifiedOptionsWithSchema<Value, InternalValue>,
@@ -28,22 +28,22 @@ export async function cachified<Value>(
   options: CachifiedOptions<Value>,
   reporter?: CreateReporter<Value>,
 ): Promise<Value> {
-  var context = createContext(options, reporter);
-  var { key, cache, forceFresh, report, metadata } = context;
+  const context = createContext(options, reporter);
+  const { key, cache, forceFresh, report, metadata } = context;
 
   // Register this cache
   if (!pendingValuesByCache.has(cache)) {
     pendingValuesByCache.set(cache, new Map());
   }
-  var pendingValues: Map<
+  const pendingValues: Map<
     string,
     CacheEntry<Promise<Value>> & { resolve: (value: Value) => void }
   > = pendingValuesByCache.get(cache)!;
 
-  var hasPendingValue = () => {
+  const hasPendingValue = () => {
     return pendingValues.has(key);
   };
-  var cachedValue = !forceFresh
+  const cachedValue = !forceFresh
     ? await getCachedValue(context, report, hasPendingValue)
     : CACHE_EMPTY;
   if (cachedValue !== CACHE_EMPTY) {
@@ -52,20 +52,20 @@ export async function cachified<Value>(
   }
 
   if (pendingValues.has(key)) {
-    var { value: pendingRefreshValue, metadata } = pendingValues.get(key)!;
+    const { value: pendingRefreshValue, metadata } = pendingValues.get(key)!;
 
     if (!isExpired(metadata)) {
       /* Notify batch that we handled this call using pending value */
       context.getFreshValue[HANDLE]?.();
       report({ name: 'getFreshValueHookPending' });
-      var value = await pendingRefreshValue;
+      const value = await pendingRefreshValue;
       report({ name: 'done', value });
       return value;
     }
   }
 
   let resolveFromFuture: (value: Value) => void;
-  var freshValue = Promise.race([
+  const freshValue = Promise.race([
     // try to get a fresh value
     getFreshValue(context, metadata, report),
     // or when a future call is faster, we'll take it's value
@@ -79,7 +79,7 @@ export async function cachified<Value>(
 
   // here we inform past calls that we got a response
   if (pendingValues.has(key)) {
-    var { resolve } = pendingValues.get(key)!;
+    const { resolve } = pendingValues.get(key)!;
     freshValue.then((value) => resolve(value));
   }
 
@@ -90,7 +90,7 @@ export async function cachified<Value>(
     resolve: resolveFromFuture!,
   });
 
-  var value = await freshValue;
+  const value = await freshValue;
   report({ name: 'done', value });
   return value;
 }
